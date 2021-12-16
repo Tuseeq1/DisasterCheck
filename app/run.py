@@ -76,6 +76,10 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+#     stats = []
+#     for col in df.columns[7:]:
+#         stats.append(df.groupby('genre').count()['message'])
+    
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -96,7 +100,8 @@ def index():
                     'title': "Genre"
                 }
             }
-        }
+        },
+        
     ]
     
     # encode plotly graphs in JSON
@@ -112,15 +117,24 @@ def index():
 def go():
     # save user input in query
     query = request.args.get('query', '') 
+    if not query:
+        return render_template(
+                    'go.html',
+                    query=query,
+                    classification_result=dict(zip(df.columns[7:], [0]*36))
+                )
+      
+    
+    
     genre = request.args.get('genre', '') 
     
     query_df = make_query_df(query, genre)
     
     # use model to predict classification for query
-#     print(model.predict([query]))
     classification_labels = model.predict(query_df)[0]
     classification_results = dict(zip(df.columns[7:], classification_labels))
-
+    classification_results = dict(sorted(classification_results.items(), key=lambda x: x[::-1], reverse=True))
+    
     # This will render the go.html Please see that file. 
     return render_template(
         'go.html',
@@ -130,7 +144,7 @@ def go():
 
 
 def main():
-    app.run(host='0.0.0.0', port=3002, debug=True)
+    app.run(host='0.0.0.0', port=3001, debug=True)
 
 
 if __name__ == '__main__':
