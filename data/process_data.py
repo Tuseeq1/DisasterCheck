@@ -4,6 +4,21 @@ import numpy as np
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
+    """load data from csv files
+    
+    Parameters
+    ----------
+    messages_filepath : str
+        Path to csv file to load message data
+    categories_filepath : str
+        Path to csv file to load categories data
+    
+    Returns
+    -------
+    DataFrame :
+        combined dataframe from both files
+       """
+    
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df =  pd.merge(messages, categories, on="id")
@@ -12,6 +27,19 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """Clean the data in given data frame to appropriate structure
+    
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        data in dataframe
+    
+    Returns
+    -------
+    DataFrame :
+        cleaned dataframe
+       """
+    
     # make genre column into seprate features
     dummies = pd.get_dummies(df['genre'], prefix='genre')
     df = pd.concat([df, dummies], axis=1)
@@ -38,6 +66,15 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+     """Save clean  data to .db file on given path
+   
+    Parameters
+    ----------
+    df : object
+        trained model to test
+    database_filename : str
+        path where to save data
+    """
     engine = create_engine(f'sqlite:///{database_filename}')
     df.to_sql('Disaster', engine, index=False, if_exists='replace')
 

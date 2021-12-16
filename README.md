@@ -21,9 +21,20 @@ For this project, I was using Data Provided by [Figure Eight](https://www.figure
 ## File Descriptions <a name="files"></a>
 
 There are three folders in this project. 
-./data => contains data set and ETL_pipeline `data/process_data.py`  that cleans and transform the data into required format
-./models => Contains `models/train_classifier.py` the code for ML model pipeline and traning model. this will create and save model in pkl file
-./app => App contains our flask app that will run and provide a visual framework to predict on new messages.
+app
+| - template
+| |- master.html # main page of web app
+| |- go.html # classification result page of web app
+|- run.py # Flask file that runs app
+data
+|- disaster_categories.csv # data to process
+|- disaster_messages.csv # data to process
+|- process_data.py # ETL Pipeline that process clean and save data into db
+|- InsertDatabaseName.db # database to save clean data to
+models
+|- train_classifier.py # ML Pipeline that generate appropriate model, train and save it pkl file
+|- classifier.pkl # saved model
+README.md
 
 The data set used for this project is also included in the project.
 

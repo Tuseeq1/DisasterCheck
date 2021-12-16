@@ -21,7 +21,6 @@ nltk.download('stopwords')
 
 
 class ColumnExtracter(BaseEstimator, TransformerMixin):
-    # return specific column or columns
     def __init__(self, columns):
         self.columns = columns
 
@@ -29,9 +28,26 @@ class ColumnExtracter(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
+        """Return sepcified Columns from df"""
         return X[self.columns]
 
 def load_data(database_filepath):
+    """load data from database
+    
+    Parameters
+    ----------
+    database_filepath : str
+        Path to .db filr to load data from
+    
+    Returns
+    -------
+    DataFrame :
+        message dataframe
+    DataFrame : 
+        category dataframe
+    list:
+        column names for category dataframes
+       """
     engine = create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table('Disaster', engine)
     X = df[['message', 'genre_direct', 'genre_news', 'genre_social']]
@@ -41,6 +57,18 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """Return tokenized form of text
+    Parameters
+    ----------
+    text : str
+        string to be tokenized
+        
+    Returns
+    -------
+    list
+        tokens of string text
+    """
+   
     # Normalize and remove punctuations and extra chars such as (, # 
     text = re.sub(r'[^a-zA-Z0-9]', ' ', text.lower())
     
@@ -53,6 +81,14 @@ def tokenize(text):
 
 
 def build_model():
+    """Return a model from pipeline to train and fit
+      
+    Returns
+    -------
+    model
+        GridSearchCV model.
+    """
+    
     # pipeline to extract message data vectoize it and perform TFIDF
     nlp_pipeline = Pipeline([
         ('msgExtractor', ColumnExtracter('message')),
@@ -84,6 +120,19 @@ def build_model():
     
     
 def evaluate_model(model, X_test, Y_test, category_names):
+    """Test model on test data and show results
+    
+    Parameters
+    ----------
+    model : object
+        trained model to test
+    X_test : pandas.DataFrame
+        dataframe to run tests on
+    Y_test : pandas.DataFrame
+        original classifcation of test data to compare with
+    category_names : List
+        list of classification names"""
+   
     y_pred = model.predict(X_test)
     
     # make it a df with column names same as Y_test
@@ -96,6 +145,15 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """Save ouir trained model to pkl file ion given path
+    
+    Parameters
+    ----------
+    model : object
+        trained model to test
+    model_filepath : str
+        path where to save model
+    """
     pickle.dump(model, open(model_filepath, 'wb') )
 
 

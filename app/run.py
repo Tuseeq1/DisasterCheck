@@ -22,7 +22,20 @@ nltk.download('stopwords')
 app = Flask(__name__)
 
 def make_query_df(query, genre):
-    # make df to send to predictor using query message and genre
+    """make df to send to predictor using query message and genre
+    
+    Parameters
+    ----------
+    query : str
+        query message given by user
+    genre : str
+        genre selected by user
+    
+    Returns
+    -------
+    DataFrame :
+        combined dataframe from both
+       """
     row = [query, 0, 0, 0]
     if genre == 'direct':
         row[1] = 1
@@ -36,6 +49,18 @@ def make_query_df(query, genre):
     return dfs
 
 def tokenize(text):
+    """Return tokenized form of text
+    Parameters
+    ----------
+    text : str
+        string to be tokenized
+        
+    Returns
+    -------
+    list
+        tokens of string text
+    """
+    
      # Normalize and remove punctuations and extra chars such as (, # 
     text = re.sub(r'[^a-zA-Z0-9]', ' ', text.lower())
     
@@ -47,7 +72,6 @@ def tokenize(text):
     return text 
 
 class ColumnExtracter(BaseEstimator, TransformerMixin):
-    # return specific column or columns
     def __init__(self, columns):
         self.columns = columns
 
@@ -140,8 +164,6 @@ def go():
                     query=query,
                     classification_result=dict(zip(df.columns[7:], [0]*36))
                 )
-      
-    
     
     genre = request.args.get('genre', '') 
     
