@@ -101,7 +101,6 @@ def index():
         
     names = df.columns[7:]
     plot_df = df[names].apply(pd.value_counts).T
-    plot_df = plot_df.drop(2, axis=1)
     plot_df = plot_df.fillna(0)
    
     # create visuals
