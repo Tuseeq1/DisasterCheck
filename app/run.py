@@ -22,6 +22,7 @@ nltk.download('stopwords')
 app = Flask(__name__)
 
 def make_query_df(query, genre):
+    # make df to send to predictor using query message and genre
     row = [query, 0, 0, 0]
     if genre == 'direct':
         row[1] = 1
@@ -29,7 +30,6 @@ def make_query_df(query, genre):
         row[2] = 1
     elif genre == 'social':
         row[3] = 1
-    
     
     dfs = pd.DataFrame([row], columns=['message', 'genre_direct','genre_news', 'genre_social'])
     
@@ -72,16 +72,15 @@ model = joblib.load("../models/classifier.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-    
-#     stats = []
-#     for col in df.columns[7:]:
-#         stats.append(df.groupby('genre').count()['message'])
-    
+        
+    names = df.columns[7:]
+    plot_df = df[names].apply(pd.value_counts).T
+    plot_df = plot_df.drop(2, axis=1)
+    plot_df = plot_df.fillna(0)
+   
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
@@ -98,6 +97,24 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=names,
+                    y=plot_df[1].tolist()
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Kind of Disaster',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Disaster"
                 }
             }
         },

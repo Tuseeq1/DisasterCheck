@@ -10,14 +10,11 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import f1_score, classification_report, precision_score
+from sklearn.metrics import classification_report
+from sklearn.base import BaseEstimator, TransformerMixin
 from nltk import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-
-# from column_extracter import ColumnExtracter
-
-from sklearn.base import BaseEstimator, TransformerMixin
 
 nltk.download(['punkt', 'wordnet'])
 nltk.download('stopwords')
@@ -40,9 +37,6 @@ def load_data(database_filepath):
     X = df[['message', 'genre_direct', 'genre_news', 'genre_social']]
     Y = df[[col for col in df.columns if col not in ['id', 'message', 'original', 'genre_direct', 'genre_news',
        'genre_social', 'genre']]]
-#     X = df[['message']]
-#     Y = df[[col for col in df.columns if col not in ['id', 'message', 'original', 'genre_direct', 'genre_news',
-#        'genre_social', 'genre']]]
     return X, Y, Y.columns
 
 
@@ -79,12 +73,6 @@ def build_model():
         ])),
         ('clf',  MultiOutputClassifier(RandomForestClassifier()))
     ])
-    
-#     pipeline = Pipeline([
-#         ('vect', CountVectorizer(tokenizer=tokenize)),
-#         ('tfidf', TfidfTransformer()),
-#         ('clf',  MultiOutputClassifier(RandomForestClassifier()))
-#     ])
     
     # paramters for grid search
     parameters = {
