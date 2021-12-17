@@ -20,21 +20,23 @@ For this project, I was using Data Provided by [Figure Eight](https://www.figure
 
 ## File Descriptions <a name="files"></a>
 
-There are three folders in this project. 
-app
-| - template
-| |- master.html # main page of web app
-| |- go.html # classification result page of web app
-|- run.py # Flask file that runs app
-data
-|- disaster_categories.csv # data to process
-|- disaster_messages.csv # data to process
-|- process_data.py # ETL Pipeline that process clean and save data into db
+There are three folders in this project.<br>
+app<br>
+| - template<br>
+| |- master.html # main page of web app<br>
+| |- go.html # classification result page of web app<br>
+|- run.py # Flask file that runs app<br>
+
+data<br>
+|- disaster_categories.csv # data to process<br>
+|- disaster_messages.csv # data to process<br>
+|- process_data.py # ETL Pipeline that process clean and save data into db<br>
 |- InsertDatabaseName.db # database to save clean data to
-models
-|- train_classifier.py # ML Pipeline that generate appropriate model, train and save it pkl file
-|- classifier.pkl # saved model
-README.md
+
+models<br>
+|- train_classifier.py # ML Pipeline that generate appropriate model, train and save it pkl file<br>
+|- classifier.pkl # saved model<br>
+README.md<br>
 
 The data set used for this project is also included in the project.
 

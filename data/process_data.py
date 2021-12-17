@@ -62,11 +62,14 @@ def clean_data(df):
     # remove Duplicate
     df = df.drop_duplicates()
     
+    # make all the 2s in related column to 1 to make it binary
+    df['related'] = df['related'].replace([2],1)
+    
     return df
 
 
 def save_data(df, database_filename):
-     """Save clean  data to .db file on given path
+    """Save clean  data to .db file on given path
    
     Parameters
     ----------

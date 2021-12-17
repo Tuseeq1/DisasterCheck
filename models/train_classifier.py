@@ -21,14 +21,36 @@ nltk.download('stopwords')
 
 
 class ColumnExtracter(BaseEstimator, TransformerMixin):
+    """Extracts Columns from df"""
     def __init__(self, columns):
+        """Initialize with columns to be extracted
+            Parameters
+            ----------
+            columns : list
+                columns to be extracted
+        """
         self.columns = columns
 
     def fit(self, X, y=None):
+         """Return self object to be used for tranform later
+            Parameters
+            ----------
+            X : Pandas Dataframe
+        """
         return self
 
     def transform(self, X, y=None):
-        """Return sepcified Columns from df"""
+        """given a df return df which has specified df
+            Parameters
+            ----------
+            X : dataframe
+               dataframe to be adjusted
+
+            Returns
+            -------
+            DataFrame :
+                new dataframe with only specified columns
+        """
         return X[self.columns]
 
 def load_data(database_filepath):
@@ -114,7 +136,7 @@ def build_model():
     parameters = {
         'clf__estimator__n_estimators': [50, 80, 70]
     }
-    cv =  GridSearchCV(pipeline, parameters)
+    cv =  GridSearchCV(pipeline, parameters, verbose=3)
     
     return cv
     
